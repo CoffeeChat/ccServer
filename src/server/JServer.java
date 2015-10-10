@@ -12,7 +12,7 @@ public class JServer {
 		try {
 			Socket cSocket = null;
 			while(true) {
-				ServerSocket sSocket = new ServerSocket(52682);
+				ServerSocket sSocket = new ServerSocket(80);
 				System.out.println("Pending connections on port 52682...");
 				cSocket = sSocket.accept();
 				System.out.println(cSocket.getInetAddress() + " attempting to connect...");
