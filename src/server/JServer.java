@@ -12,7 +12,7 @@ public class JServer {
 		try {
 			Socket cSocket = null;
 			while(true) {
-				ServerSocket sSocket = new ServerSocket(80);
+				ServerSocket sSocket = new ServerSocket(52682);
 				System.out.println("Pending connections on port 52682...");
 				cSocket = sSocket.accept();
 				System.out.println(cSocket.getInetAddress() + " attempting to connect...");
@@ -26,6 +26,20 @@ public class JServer {
 		}
 	}
 	
+	/**
+	 * Broadcasts a server message to all users.
+	 * @param msg
+	 * @return
+	 */
+	public static boolean broadcast(String msg) {
+		System.out.println("Broadcasting " + msg + " to " + userList.size() + " people.");
+		for(ConnectionHandler ch : userList) {
+			ch.serverParse("/z <*Server>: " + msg);
+		}
+		
+		return true;
+	}
+	
 	public static boolean broadcast(String msg, String handle) {
 		System.out.println("Broadcasting " + msg + " to " + userList.size() + " people.");
 		for(ConnectionHandler ch : userList) {
@@ -33,5 +47,14 @@ public class JServer {
 		}
 		
 		return true;
+	}
+	
+	public static String disconnectUser(ConnectionHandler ch) {
+		if(userList.remove(ch)) {
+			return ch.getHandle();
+		} else {
+			System.out.println("User " + ch.getHandle() + " was not found in the user list.");
+			return "USERNOTFOUND";
+		}
 	}
 }

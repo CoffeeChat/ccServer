@@ -44,7 +44,16 @@ public class ConnectionHandler implements Runnable {
 			System.out.println("Timed out.");
 		} catch(IOException ioe) {
 			ioe.printStackTrace();
+		} finally {
+			System.out.println("This happens after a disconnect.");
+			String dcUsername = JServer.disconnectUser(this);
+			JServer.broadcast("User " + dcUsername + " has disconnected.");
 		}
+		return;
+	}
+	
+	public String getHandle() {
+		return handle;
 	}
 	
 	/**
@@ -80,7 +89,15 @@ public class ConnectionHandler implements Runnable {
 			//Gets number and names of users.
 			case "/u":
 			case "/users":
-				
+				int noOfAnons = 0;
+				for(int x = 0; x < JServer.userList.size(); x++) {
+					if(JServer.userList.get(x).handle.charAt(0) == '~') {
+						noOfAnons++;
+					} else {
+						toClient.println(JServer.userList.get(x).handle);
+					}
+				}
+				toClient.println(noOfAnons + " anonymous user(s).");
 				break;
 				
 			//Private case: used to send a broadcast message.
